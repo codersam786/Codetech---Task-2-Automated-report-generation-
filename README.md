@@ -1,3 +1,16 @@
+# CODETECH--Task1
+
+**Name:** MD SAMEER ANSARI
+
+**Company:** CODTECH IT SOLUTIONS
+
+**ID:** CT12WDS94
+
+**Domain:** Python Programming
+
+**Duration:** December to March 2024  
+
+
 # Codetech---Task-2-Automated-report-generation-
 Here's a Python script that reads data from a CSV file, analyzes it, and generates a formatted PDF report using the FPDF library. The script will compute basic statistics (like mean, max, min, etc.) for numerical data in the CSV and include these in the PDF report.
 
