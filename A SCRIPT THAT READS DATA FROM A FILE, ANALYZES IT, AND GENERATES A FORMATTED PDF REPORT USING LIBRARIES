@@ -1,0 +1,65 @@
+import csv
+import statistics
+from fpdf import FPDF
+
+# Function to read data from a CSV file
+def read_csv_data(file_path):
+    with open(file_path, mode='r') as file:
+        csv_reader = csv.DictReader(file)
+        data = [row for row in csv_reader]
+    return data
+
+# Function to analyze numerical columns in the data
+def analyze_data(data):
+    analysis = {}
+    numerical_columns = [col for col in data[0].keys() if all(row[col].replace('.', '', 1).isdigit() for row in data)]
+    
+    for col in numerical_columns:
+        values = [float(row[col]) for row in data]
+        analysis[col] = {
+            'mean': statistics.mean(values),
+            'min': min(values),
+            'max': max(values),
+            'median': statistics.median(values),
+            'stdev': statistics.stdev(values) if len(values) > 1 else 0
+        }
+    return analysis
+
+# Function to generate a PDF report
+def generate_pdf_report(analysis, file_path):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, "Data Analysis Report", ln=True, align='C')
+    
+    pdf.ln(10)  # Add a line break
+    
+    for column, stats in analysis.items():
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(200, 10, f"Column: {column}", ln=True)
+        
+        pdf.set_font("Arial", "", 12)
+        for stat, value in stats.items():
+            pdf.cell(200, 10, f"{stat.capitalize()}: {value:.2f}", ln=True)
+        
+        pdf.ln(5)  # Add some space before the next column
+
+    pdf.output(file_path)
+
+# Main function to read, analyze and generate report
+def main():
+    csv_file = 'data.csv'  # Replace with your CSV file path
+    pdf_file = 'report.pdf'  # Output PDF file
+    
+    data = read_csv_data(csv_file)
+    if data:
+        analysis = analyze_data(data)
+        generate_pdf_report(analysis, pdf_file)
+        print(f"Report generated: {pdf_file}")
+    else:
+        print("No data found in the CSV file.")
+
+if __name__ == "__main__":
+    main()
