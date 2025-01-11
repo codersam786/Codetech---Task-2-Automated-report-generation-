@@ -63,3 +63,62 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# using FPDF library
+
+from fpdf import FPDF
+import pandas as pd
+
+def generate_pdf_report(input_file, output_file):
+    """
+    Reads data from a file, analyzes it, and generates a formatted PDF report.
+
+    Args:
+        input_file (str): Path to the input file (e.g., CSV, Excel).
+        output_file (str): Path to the output PDF file.
+
+    """
+
+    # 1. Read data from the input file
+    try:
+        df = pd.read_csv(input_file)  # Adjust for different file types (e.g., pd.read_excel())
+    except FileNotFoundError:
+        print(f"Error: Input file '{input_file}' not found.")
+        return
+
+    # 2. Data Analysis (Replace with your specific analysis)
+    # Example: Calculate summary statistics
+    summary_stats = df.describe()
+
+    # 3. Create an FPDF object
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(w=0, h=10, txt="Report Summary", ln=1, align="C")
+    pdf.set_font("Arial", "", 12)
+
+    # 4. Add data to the PDF
+    pdf.cell(w=0, h=10, txt=f"File: {input_file}", ln=1)
+    pdf.cell(w=0, h=10, txt="Summary Statistics:", ln=1)
+
+    # 5. Add summary statistics table
+    columns = summary_stats.columns
+    for column in columns:
+        pdf.cell(w=0, h=10, txt=f"{column}:", ln=1)
+        for stat, value in summary_stats[column].items():
+            pdf.cell(w=0, h=10, txt=f"  - {stat}: {value}", ln=1)
+
+    # 6. Add more sections to the report (optional)
+    #   - Charts/Graphs (using libraries like matplotlib and Pillow)
+    #   - Custom tables
+    #   - Textual observations
+
+    # 7. Save the PDF report
+    pdf.output(output_file, "F")
+    print(f"Report generated successfully: {output_file}")
+
+if __name__ == "__main__":
+    input_filename = "data.csv"  # Replace with your input file path
+    output_filename = "report.pdf"
+    generate_pdf_report(input_filename, output_filename)
