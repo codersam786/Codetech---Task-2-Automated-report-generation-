@@ -1,5 +1,3 @@
-# CODETECH--Task1
-
 **Name:** MD SAMEER ANSARI
 
 **Company:** CODTECH IT SOLUTIONS
